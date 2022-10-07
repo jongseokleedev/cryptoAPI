@@ -1,5 +1,5 @@
 require("dotenv").config();
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import Web3 from "web3";
 
 const soohoAbi = require("../../contracts/sooho/soohoERC20abi");

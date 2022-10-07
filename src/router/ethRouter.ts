@@ -1,5 +1,4 @@
 import express, { Router } from "express";
-import { wallet } from "../api/btc/btc";
 import { newMnemonic, newWallet, balanceOf } from "../api/eth/wallet";
 import {
 	balanceOfERC20,
