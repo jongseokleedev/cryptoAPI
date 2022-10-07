@@ -1,4 +1,4 @@
-const ERC20abi = [
+const soohoERC20abi = [
 	{
 		constant: true,
 		inputs: [],
@@ -359,4 +359,4 @@ const ERC20abi = [
 		type: "event",
 	},
 ];
-module.exports = ERC20abi;
+module.exports = soohoERC20abi;
