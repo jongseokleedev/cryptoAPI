@@ -11,8 +11,10 @@ import {
 	sendTransaction,
 	getTransaction,
 } from "../api/eth/txs";
+import { getChainInfo } from "../api/eth/main";
 const router: Router = express.Router();
 
+router.get("/main/chain", getChainInfo);
 router.post("/wallet/newMnemonic", newMnemonic);
 router.post("/wallet/new", newWallet);
 router.get("/wallet/balanceOf/:address", balanceOf);

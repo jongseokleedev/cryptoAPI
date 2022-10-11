@@ -3,10 +3,24 @@ import { Request, Response } from "express";
 import Web3 from "web3";
 
 const soohoAbi = require("../../contracts/sooho/soohoERC20abi");
-const soohoContractAddress = require("../../contracts/sooho/soohoERC20address");
-
+const goerliSoohoContractAddress = require("../../contracts/sooho/goerliSoohoERC20address");
+const sepoliaSoohoContractAddress = require("../../contracts/sooho/sepoliaSoohoERC20address");
 const SepoliaTestnet: string = process.env.SepoliaTestnet || "";
-const web3 = new Web3(new Web3.providers.HttpProvider(SepoliaTestnet));
+const GoerliTestnet: string = process.env.GoerliTestnet || "";
+const soohoContractAddress =
+	process.env.CurrentChain === "goerli"
+		? goerliSoohoContractAddress
+		: process.env.CurrentChain === "sepolia"
+		? sepoliaSoohoContractAddress
+		: sepoliaSoohoContractAddress;
+const provider =
+	process.env.CurrentChain === "sepolia"
+		? SepoliaTestnet
+		: process.env.CurrentChain === "goerli"
+		? GoerliTestnet
+		: SepoliaTestnet;
+const web3 = new Web3(new Web3.providers.HttpProvider(provider));
+
 const { toWei, fromWei } = web3.utils;
 
 const soohoContract = new web3.eth.Contract(soohoAbi, soohoContractAddress);
@@ -51,9 +65,6 @@ const createERC20Transaction = async (req: Request, res: Response) => {
 			to: contractAddress,
 			nonce: nonce,
 			gasPrice: await web3.eth.getGasPrice(),
-			// gasLimit: await myContract.methods
-			// 	.transferFrom(from, to, value * 100)
-			// 	.estimateGas(),
 			gasLimit: 210000,
 			data: await myContract.methods.transfer(to, value * 100).encodeABI(),
 		};

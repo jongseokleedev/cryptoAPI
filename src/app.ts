@@ -3,10 +3,13 @@ import apiRoute from "./router/index"; // export한 이름과 다르게 import�
 import { Error } from "./common/interfaces";
 const port = process.env.PORT || 5000;
 const app = express(); // express 객체 받아옴
-
+export const domain = require("domain").create();
 app.use(express.json());
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
 	res.send("Hi! This is Crypto API server");
+});
+domain.on("error", (err: any) => {
+	console.log("err" + err);
 });
 
 app.use("/api", apiRoute);
@@ -23,6 +26,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 	res.status(err.status || 500);
 	res.json({
 		errors: {
+			success: false,
 			message: err.message,
 		},
 	});
