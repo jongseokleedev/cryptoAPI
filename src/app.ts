@@ -8,10 +8,6 @@ app.use(express.json());
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
 	res.send("Hi! This is Crypto API server");
 });
-domain.on("error", (err: any) => {
-	console.log("err" + err);
-});
-
 app.use("/api", apiRoute);
 
 // catch 404 and forward to error handler

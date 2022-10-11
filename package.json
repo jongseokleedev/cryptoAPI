@@ -6,8 +6,9 @@
 		"start": "nodemon ./src/app.ts",
 		"dev": "nodemon",
 		"build": "tsc && node dist",
-		"test": "ts-mocha ./test/*.ts --timeout 200000 --exit",
-		"test4": "ts-mocha ./test/4_ethErc20.spec.ts --timeout 200000 --exit"
+		"test": "ts-mocha ./test/**/*.ts --timeout 200000 --exit",
+		"testbtc": "ts-mocha ./test/btc/*.ts --timeout 200000 --exit",
+		"testeth": "ts-mocha ./test/eth/*.ts --timeout 200000 --exit"
 	},
 	"author": "",
 	"license": "ISC",

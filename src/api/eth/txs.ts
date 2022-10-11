@@ -4,11 +4,14 @@ import Web3 from "web3";
 import { ethTx } from "../../common/interfaces";
 const SepoliaTestnet: string = process.env.SepoliaTestnet || "";
 const GoerliTestnet: string = process.env.GoerliTestnet || "";
+const EthMainnet: string = process.env.EthMainnet || "";
 const provider =
-	process.env.CurrentChain === "sepolia"
+	process.env.ethCurrentChain === "sepolia"
 		? SepoliaTestnet
-		: process.env.CurrentChain === "goerli"
+		: process.env.ethCurrentChain === "goerli"
 		? GoerliTestnet
+		: process.env.ethCurrentChain == "mainnet"
+		? EthMainnet
 		: SepoliaTestnet;
 const web3 = new Web3(new Web3.providers.HttpProvider(provider));
 const { toWei, fromWei } = web3.utils;
@@ -46,21 +49,19 @@ const createTransaction = async (req: Request, res: Response) => {
 		}),
 	};
 
-	res.status(200).send({
+	res.status(201).send({
 		success: true,
 		message: "정상적으로 처리되었습니다",
 		data: tx,
 	});
 };
-function instanceOfEthTx(object: any): object is ethTx {
-	return object;
-}
+
 const signTransaction = async (req: Request, res: Response) => {
 	try {
 		const { tx, privateKey } = req.body;
 		const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
 
-		res.status(200).send({
+		res.status(201).send({
 			success: true,
 			message: "정상적으로 처리되었습니다",
 			data: {
@@ -71,7 +72,6 @@ const signTransaction = async (req: Request, res: Response) => {
 		res.status(500).send({
 			success: false,
 			message: e,
-			// data: signedTx.rawTransaction,
 		});
 	}
 };
@@ -83,7 +83,7 @@ const sendTransaction = async (req: Request, res: Response) => {
 			return res.status(400).send({ error: err });
 		}
 	});
-	res.status(200).send({
+	res.status(201).send({
 		success: true,
 		message: "정상적으로 처리되었습니다",
 		data: receipt,
@@ -93,13 +93,13 @@ const sendTransaction = async (req: Request, res: Response) => {
 const getTransaction = async (req: Request, res: Response) => {
 	const { txHash } = req.params;
 
-	if (process.env.CurrentChain === "sepolia") {
+	if (process.env.ethCurrentChain === "sepolia") {
 		res.status(200).send({
 			success: true,
 			message: "정상적으로 처리되었습니다",
 			data: { etherScanUrl: `https://sepolia.etherscan.io/tx/${txHash}` },
 		});
-	} else if (process.env.CurrentChain === "goerli") {
+	} else if (process.env.ethCurrentChain === "goerli") {
 		res.status(200).send({
 			success: true,
 			message: "정상적으로 처리되었습니다",

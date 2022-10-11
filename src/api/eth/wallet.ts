@@ -7,11 +7,14 @@ import { Error } from "../../common/interfaces";
 const domain = require("domain").create();
 const SepoliaTestnet: string = process.env.SepoliaTestnet || "";
 const GoerliTestnet: string = process.env.GoerliTestnet || "";
+const EthMainnet: string = process.env.EthMainnet || "";
 const provider =
-	process.env.CurrentChain === "sepolia"
+	process.env.ethCurrentChain === "sepolia"
 		? SepoliaTestnet
-		: process.env.CurrentChain === "goerli"
+		: process.env.ethCurrentChain === "goerli"
 		? GoerliTestnet
+		: process.env.ethCurrentChain == "mainnet"
+		? EthMainnet
 		: SepoliaTestnet;
 const web3 = new Web3(new Web3.providers.HttpProvider(provider));
 const { toWei, fromWei } = web3.utils;
@@ -21,7 +24,7 @@ const newMnemonic = async (req: Request, res: Response) => {
 	let mnemonic;
 	try {
 		mnemonic = lightwallet.keystore.generateRandomSeed();
-		res.status(200).send({
+		res.status(201).send({
 			success: true,
 			message: "정상적으로 처리되었습니다.",
 			mnemonic,
@@ -73,7 +76,7 @@ const newWallet = async (req: Request, res: Response) => {
 					// let keystore = ks.serialize();
 					let privateKey = ks.exportPrivateKey(address, pwDerivedKey);
 
-					res.status(200).send({
+					res.status(201).send({
 						success: true,
 						message: "정상적으로 처리되었습니다.",
 						privateKey: privateKey,

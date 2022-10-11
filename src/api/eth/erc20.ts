@@ -7,18 +7,21 @@ const goerliSoohoContractAddress = require("../../contracts/sooho/goerliSoohoERC
 const sepoliaSoohoContractAddress = require("../../contracts/sooho/sepoliaSoohoERC20address");
 const SepoliaTestnet: string = process.env.SepoliaTestnet || "";
 const GoerliTestnet: string = process.env.GoerliTestnet || "";
+const EthMainnet: string = process.env.EthMainnet || "";
+const provider =
+	process.env.ethCurrentChain === "sepolia"
+		? SepoliaTestnet
+		: process.env.ethCurrentChain === "goerli"
+		? GoerliTestnet
+		: process.env.ethCurrentChain == "mainnet"
+		? EthMainnet
+		: SepoliaTestnet;
 const soohoContractAddress =
-	process.env.CurrentChain === "goerli"
+	process.env.ethCurrentChain === "goerli"
 		? goerliSoohoContractAddress
-		: process.env.CurrentChain === "sepolia"
+		: process.env.ethCurrentChain === "sepolia"
 		? sepoliaSoohoContractAddress
 		: sepoliaSoohoContractAddress;
-const provider =
-	process.env.CurrentChain === "sepolia"
-		? SepoliaTestnet
-		: process.env.CurrentChain === "goerli"
-		? GoerliTestnet
-		: SepoliaTestnet;
 const web3 = new Web3(new Web3.providers.HttpProvider(provider));
 
 const { toWei, fromWei } = web3.utils;
@@ -69,7 +72,7 @@ const createERC20Transaction = async (req: Request, res: Response) => {
 			data: await myContract.methods.transfer(to, value * 100).encodeABI(),
 		};
 		if (tokenSymbol === "sooho") {
-			res.status(200).send({
+			res.status(201).send({
 				success: true,
 				message: "정상적으로 처리되었습니다",
 				data: tx,
@@ -94,7 +97,7 @@ const sendERC20Transaction = async (req: Request, res: Response) => {
 				return res.status(400).send({ error: err });
 			} else {
 				const receipt = await web3.eth.getTransactionReceipt(result);
-				return res.status(200).send({
+				return res.status(201).send({
 					success: true,
 					message: "정상적으로 처리되었습니다",
 					data: receipt,

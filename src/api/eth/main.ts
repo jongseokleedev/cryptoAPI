@@ -6,12 +6,15 @@ const getChainInfo = async (req: Request, res: Response) => {
 	const currentChain = process.env.CurrentChain || "";
 	const SepoliaTestnet: string = process.env.SepoliaTestnet || "";
 	const GoerliTestnet: string = process.env.GoerliTestnet || "";
-	const provider =
-		process.env.CurrentChain === "sepolia"
-			? SepoliaTestnet
-			: process.env.CurrentChain === "goerli"
-			? GoerliTestnet
-			: SepoliaTestnet;
+	const EthMainnet: string = process.env.EthMainnet || "";
+    const provider =
+	process.env.ethCurrentChain === "sepolia"
+		? SepoliaTestnet
+		: process.env.ethCurrentChain === "goerli"
+		? GoerliTestnet
+		: process.env.ethCurrentChain == "mainnet"
+		? EthMainnet
+		: SepoliaTestnet;
 	const web3 = new Web3(new Web3.providers.HttpProvider(provider));
 	// console.log(web3);
 

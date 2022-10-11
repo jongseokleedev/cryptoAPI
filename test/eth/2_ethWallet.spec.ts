@@ -1,13 +1,14 @@
 import { expect } from "chai";
 import request from "supertest";
 
-import app from "../src/app";
+import app from "../../src/app";
 
+const testAddr_1 = process.env.ethAddr_1 || "";
 describe("이더리움 지갑 테스트", () => {
 	it("니모닉 코드 생성하면 12개 니모닉 코드를 반환합니다.", (done) => {
 		request(app)
 			.post("/api/eth/wallet/newMnemonic")
-			.expect(200)
+			.expect(201)
 			.end((err, res) => {
 				if (err) {
 					throw err;
@@ -28,7 +29,7 @@ describe("이더리움 지갑 테스트", () => {
 				mnemonic:
 					"exist blur few deer whale final raw plunge develop permit soap spoil",
 			})
-			.expect(200)
+			.expect(201)
 			.end((err, res) => {
 				if (err) {
 					throw err;
@@ -58,11 +59,9 @@ describe("이더리움 지갑 테스트", () => {
 				done();
 			});
 	});
-	it("이더리움 주소를 통해 잔액을 확인할 수 있어야 합니다.", (done) => {
+	it("이더리움 주소에 맞는 잔액을 반환합니다.", (done) => {
 		request(app)
-			.get(
-				"/api/eth/wallet/balanceOf/0x1a188E45972F5Eb710Ee75F4e29a9fe9Fb2cad6d"
-			)
+			.get(`/api/eth/wallet/balanceOf/${testAddr_1}`)
 			.expect(200)
 			.end((err, res) => {
 				if (err) {
@@ -76,11 +75,11 @@ describe("이더리움 지갑 테스트", () => {
 
 	it("유효하지 않은 이더리움 주소를 입력하면 에러를 반환합니다.", (done) => {
 		request(app)
-			.get("/api/eth/wallet/balanceOf/0x123")
-			.expect(500)
+			.get("/api/eth/wallet/balanceOf/0x123") //invalid Address
+			.expect(400)
 			.end((err, res) => {
 				if (err) {
-					// throw err;
+					throw err;
 				}
 				expect(res.body.success).to.be.eql(false);
 
