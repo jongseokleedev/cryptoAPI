@@ -8,7 +8,7 @@ const token = process.env.BlockCypherToken || ""
 describe("비트코인 체인 정보 확인 테스트", () => {
 	it("비트코인 체인 정보를 반환합니다.", (done) => {
 		request(app)
-			.get("/api/btc/main/chain")
+			.get("/api/btc/chain")
 			.expect(200)
 			.end((err, res) => {
 				if (err) {
@@ -26,7 +26,7 @@ describe("비트코인 체인 정보 확인 테스트", () => {
 describe("BlockCypher 토큰 API Call Limit 확인 테스트", () => {
 	it("BlockCypher 토큰 API Call Limit을 반환합니다.", (done) => {
 		request(app)
-			.get(`/api/btc/main/token/${token}`)
+			.get(`/api/btc/token/${token}`)
 			.expect(200)
 			.end((err, res) => {
 				if (err) {

@@ -90,25 +90,4 @@ const createERC20Transaction = async (req: Request, res: Response) => {
 	}
 }
 
-//erc20 트랜잭션 전송
-const sendERC20Transaction = async (req: Request, res: Response) => {
-	const { signedTx } = req.body
-
-	const result = await web3.eth.sendSignedTransaction(
-		signedTx,
-		async (err, result) => {
-			if (err) {
-				return res.status(400).send({ error: err })
-			} else {
-				const receipt = await web3.eth.getTransactionReceipt(result)
-				return res.status(201).send({
-					success: true,
-					message: "정상적으로 처리되었습니다",
-					data: receipt,
-				})
-			}
-		}
-	)
-}
-
-export { balanceOfERC20, createERC20Transaction, sendERC20Transaction }
+export { balanceOfERC20, createERC20Transaction }

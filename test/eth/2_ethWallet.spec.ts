@@ -8,7 +8,7 @@ const testMnemonic_1 = process.env.ethMnemonic_1 || ""
 describe("이더리움 지갑 테스트", () => {
 	it("니모닉 코드 생성하면 12개 니모닉 코드를 반환합니다.", (done) => {
 		request(app)
-			.post("/api/eth/wallet/newMnemonic")
+			.post("/api/eth/wallet/mnemonic")
 			.expect(201)
 			.end((err, res) => {
 				if (err) {
@@ -24,7 +24,7 @@ describe("이더리움 지갑 테스트", () => {
 	})
 	it("12개의 니모닉 코드로 이더리움 지갑을 생성할 수 있어야 합니다.", (done) => {
 		request(app)
-			.post("/api/eth/wallet/new")
+			.post("/api/eth/wallet")
 			.send({
 				password: "1q2w3e4r",
 				mnemonic: testMnemonic_1,
@@ -43,7 +43,7 @@ describe("이더리움 지갑 테스트", () => {
 	})
 	it("11개의 니모닉 코드를 입력하면 에러를 반환합니다.", (done) => {
 		request(app)
-			.post("/api/eth/wallet/new")
+			.post("/api/eth/wallet")
 			.send({
 				password: "1q2w3e4r",
 				mnemonic:
@@ -61,7 +61,7 @@ describe("이더리움 지갑 테스트", () => {
 	})
 	it("이더리움 주소에 맞는 잔액을 반환합니다.", (done) => {
 		request(app)
-			.get(`/api/eth/wallet/balanceOf/${testAddr_1}`)
+			.get(`/api/eth/wallet/${testAddr_1}`)
 			.expect(200)
 			.end((err, res) => {
 				if (err) {
@@ -75,7 +75,7 @@ describe("이더리움 지갑 테스트", () => {
 
 	it("유효하지 않은 이더리움 주소를 입력하면 에러를 반환합니다.", (done) => {
 		request(app)
-			.get("/api/eth/wallet/balanceOf/0x123") //invalid Address
+			.get("/api/eth/wallet/0x123") //invalid Address
 			.expect(400)
 			.end((err, res) => {
 				if (err) {

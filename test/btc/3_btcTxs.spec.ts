@@ -191,7 +191,7 @@ const txExample =
 describe("비트코인 트랜잭션 생성 테스트", () => {
 	it("비트코인 트랜잭션을 생성하면 트랜잭션 정보를 반환합니다.", (done) => {
 		request(app)
-			.post("/api/btc/txs/new")
+			.post("/api/btc/txs")
 			.send({ from: testAddr_1, to: testAddr_2, value: 100000 })
 			.expect(201)
 			.end((err, res) => {
@@ -267,7 +267,7 @@ describe("비트코인 트랜잭션 전송 테스트", () => {
 	})
 	it("비트코인 트랜잭션이 네트워크로 전송되어야 합니다.", (done) => {
 		request(app)
-			.post("/api/btc/txs")
+			.post("/api/btc/txs/send")
 			.send({
 				tx: preparedTx.tx,
 				tosign: preparedTx.tosign,

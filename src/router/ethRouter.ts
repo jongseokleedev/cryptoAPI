@@ -1,10 +1,6 @@
 import express, { Router } from "express"
 import { newMnemonic, newWallet, balanceOf } from "../api/eth/wallet"
-import {
-	balanceOfERC20,
-	createERC20Transaction,
-	sendERC20Transaction,
-} from "../api/eth/erc20"
+import { balanceOfERC20, createERC20Transaction } from "../api/eth/erc20"
 import {
 	createTransaction,
 	signTransaction,
@@ -15,22 +11,21 @@ import { getChainInfo } from "../api/eth/main"
 const router: Router = express.Router()
 
 //main
-router.get("/main/chain", getChainInfo)
+router.get("/chain", getChainInfo)
 
 //wallet
-router.post("/wallet/newMnemonic", newMnemonic)
-router.post("/wallet/new", newWallet)
-router.get("/wallet/balanceOf/:address", balanceOf)
+router.post("/wallet/mnemonic", newMnemonic)
+router.post("/wallet", newWallet)
+router.get("/wallet/:address", balanceOf)
 
 //erc20
-router.get("/erc20/balanceOf/:tokenSymbol/:address", balanceOfERC20)
-router.post("/erc20/new/:tokenSymbol", createERC20Transaction)
-router.post("/erc20/send", sendERC20Transaction)
+router.get("/erc20/:tokenSymbol/:address", balanceOfERC20)
+router.post("/erc20/:tokenSymbol", createERC20Transaction)
 
 //txs
-router.post("/txs/new", createTransaction)
+router.post("/txs", createTransaction)
 router.post("/txs/sign", signTransaction)
-router.post("/txs", sendTransaction)
+router.post("/txs/send", sendTransaction)
 router.get("/txs/:txHash", getTransaction)
 
 export default router

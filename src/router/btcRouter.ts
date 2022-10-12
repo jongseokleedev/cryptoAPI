@@ -12,18 +12,18 @@ import { balanceOf, getFaucet, newWallet } from "../api/btc/wallet"
 const router: Router = express.Router()
 
 //main
-router.get("/main/chain", getChainInfo)
-router.get("/main/token/:token", getTokenInfo)
+router.get("/chain", getChainInfo)
+router.get("/token/:token", getTokenInfo)
 
 //wallet
-router.post("/wallet/new", newWallet)
-router.get("/wallet/balanceOf/:address", balanceOf)
+router.post("/wallet", newWallet)
+router.get("/wallet/:address", balanceOf)
 router.post("/wallet/faucet", getFaucet)
 
 //txs
-router.post("/txs/new", createTransaction)
+router.post("/txs", createTransaction)
 router.post("/txs/sign", signTransaction)
-router.post("/txs", sendTransaction)
+router.post("/txs/send", sendTransaction)
 router.get("/txs/:txHash", getTransaction)
 
 export default router

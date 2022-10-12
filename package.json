@@ -4,7 +4,6 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "nodemon ./src/app.ts",
-		"dev": "nodemon",
 		"build": "tsc && node dist",
 		"test": "ts-mocha ./test/**/*.ts --timeout 200000 --exit",
 		"testbtc": "ts-mocha ./test/btc/*.ts --timeout 200000 --exit",

@@ -16,7 +16,7 @@ let testAddr_1 =
 describe("비트코인 지갑 테스트", () => {
 	it("비트코인 지갑을 생성하고 Address,PubKey,PrivateKey,wif를 반환합니다.", (done) => {
 		request(app)
-			.post("/api/btc/wallet/new")
+			.post("/api/btc/wallet")
 			.expect(201)
 			.end((err, res) => {
 				if (err) {
@@ -33,7 +33,7 @@ describe("비트코인 지갑 테스트", () => {
 
 	it("비트코인 주소에 맞는 잔액을 반환합니다.", (done) => {
 		request(app)
-			.get(`/api/btc/wallet/balanceOf/${testAddr_1}`)
+			.get(`/api/btc/wallet/${testAddr_1}`)
 			.expect(200)
 			.end((err, res) => {
 				if (err) {

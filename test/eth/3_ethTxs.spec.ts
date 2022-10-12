@@ -27,7 +27,7 @@ const { toWei, fromWei } = web3.utils
 describe("이더리움 송금 트랜잭션 생성 테스트", () => {
 	it("이더리움 트랜잭션이 정상적으로 생성되어야 합니다.", (done) => {
 		request(app)
-			.post("/api/eth/txs/new")
+			.post("/api/eth/txs")
 			.send({
 				from: testAddr_1,
 				to: testAddr_2,
@@ -51,7 +51,7 @@ describe("이더리움 송금 트랜잭션 생성 테스트", () => {
 	})
 	it("잘못된 주소로 이더리움 트랜잭션 생성을 요청하면 에러를 반환합니다.", (done) => {
 		request(app)
-			.post("/api/eth/txs/new")
+			.post("/api/eth/txs")
 			.send({
 				from: testAddr_1,
 				to: testAddr_2,
@@ -68,7 +68,7 @@ describe("이더리움 송금 트랜잭션 생성 테스트", () => {
 	})
 	it("잘못된 값으로 이더리움 트랜잭션 생성을 요청하면 에러를 반환합니다.", (done) => {
 		request(app)
-			.post("/api/eth/txs/new")
+			.post("/api/eth/txs")
 			.send({
 				from: "0x123", //invalid Address
 				to: "0x456", //invalid Address
@@ -176,7 +176,7 @@ describe("이더리움 송금 트랜잭션 전송 테스트", () => {
 	it("이더리움 트랜잭션이 정상적으로 전송되어야 합니다.", (done) => {
 		console.log("이더리움 트랜잭션 전송 응답을 기다립니다 ...")
 		request(app)
-			.post("/api/eth/txs")
+			.post("/api/eth/txs/send")
 			.send({
 				signedTx: rawTransaction,
 			})
@@ -198,7 +198,9 @@ describe("이더리움 송금 트랜잭션 전송 테스트", () => {
 		afterFromBalance = Number(fromWei(await web3.eth.getBalance(from)))
 		afterToBalance = Number(fromWei(await web3.eth.getBalance(to)))
 		// 0.001 Eth가 잘 전송되었는지 확인
-		expect(beforeToBalance + 0.001).to.least(afterToBalance)
+		expect(Math.round((beforeToBalance + 0.001) * 10000) / 10000).to.least(
+			Math.round(afterToBalance * 10000) / 10000
+		)
 	})
 })
 
