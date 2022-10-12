@@ -48,7 +48,7 @@
 btcCurrentChain = "bcy" // default value, 비트코인 blockCypher 테스트넷 사용  
 btcCurrentChain = "btcTest" // bitcoin 테스트넷 사용
 
-ethCurrentChain = "sepolia" // default value, 이더리움 sepolia 테스트넷 사용
+ethCurrentChain = "sepolia" // default value, 이더리움 sepolia 테스트넷 사용.  
 ethCurrentChain = "goerli" // 이더리움 goerli 테스트넷 사용.
 
 **.env 파일은 과제제출용으로 한시적으로 공개합니다.**
