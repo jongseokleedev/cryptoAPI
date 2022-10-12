@@ -358,5 +358,5 @@ const soohoERC20abi = [
 		name: "Approval",
 		type: "event",
 	},
-];
-module.exports = soohoERC20abi;
+]
+module.exports = soohoERC20abi

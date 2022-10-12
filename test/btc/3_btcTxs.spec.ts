@@ -1,72 +1,72 @@
-require("dotenv").config();
-import { expect } from "chai";
-import request from "supertest";
+require("dotenv").config()
+import { expect } from "chai"
+import request from "supertest"
 
-import app from "../../src/app";
-const axios = require("axios");
-const bitcoin = require("bitcoinjs-lib");
-import ECPairFactory from "ecpair";
-import * as ecc from "tiny-secp256k1";
-import { resourceLimits } from "worker_threads";
-const bcyTestnetURL = "https://api.blockcypher.com/v1/bcy/test";
-const btcTestnetURL = "https://api.blockcypher.com/v1/btc/test3";
+import app from "../../src/app"
+const axios = require("axios")
+const bitcoin = require("bitcoinjs-lib")
+import ECPairFactory from "ecpair"
+import * as ecc from "tiny-secp256k1"
+import { resourceLimits } from "worker_threads"
+const bcyTestnetURL = "https://api.blockcypher.com/v1/bcy/test"
+const btcTestnetURL = "https://api.blockcypher.com/v1/btc/test3"
 const testnetURL =
 	process.env.btcCurrentChain === "bcy"
 		? bcyTestnetURL
 		: process.env.btcCurrentChain === "btcTest"
 		? btcTestnetURL
-		: bcyTestnetURL;
-const bcyTestnetInfo = process.env.bcyTestnet || {};
+		: bcyTestnetURL
+const bcyTestnetInfo = process.env.bcyTestnet || {}
 const TESTNET =
 	process.env.btcCurrentChain === "bcy"
 		? bcyTestnetInfo
 		: process.env.btcCurrentChain === "btcTest"
 		? bitcoin.networks.testnet
-		: bcyTestnetInfo;
+		: bcyTestnetInfo
 
-const token = process.env.BlockCypherToken;
+const token = process.env.BlockCypherToken
 
-let bcyTestAddr_1 = process.env.bcyTestAddr_1 || "";
-let bcyTestAddr_2 = process.env.bcyTestAddr_2 || "";
-let btcTestAddr_1 = process.env.btcTestAddr_1 || "";
-let btcTestAddr_2 = process.env.btcTestAddr_2 || "";
-let bcyTestPk_1 = process.env.bcyTestPk_1 || "";
-let bcyTestPk_2 = process.env.bcyTestPk_2 || "";
-let btcTestPk_1 = process.env.btcTestPk_1 || "";
-let btcTestPk_2 = process.env.btcTestPk_1 || "";
+let bcyTestAddr_1 = process.env.bcyTestAddr_1 || ""
+let bcyTestAddr_2 = process.env.bcyTestAddr_2 || ""
+let btcTestAddr_1 = process.env.btcTestAddr_1 || ""
+let btcTestAddr_2 = process.env.btcTestAddr_2 || ""
+let bcyTestPk_1 = process.env.bcyTestPk_1 || ""
+let bcyTestPk_2 = process.env.bcyTestPk_2 || ""
+let btcTestPk_1 = process.env.btcTestPk_1 || ""
+let btcTestPk_2 = process.env.btcTestPk_1 || ""
 let testAddr_1 =
 	process.env.btcCurrentChain === "bcy"
 		? bcyTestAddr_1
 		: process.env.btcCurrentChain === "btcTest"
 		? btcTestAddr_1
-		: bcyTestAddr_1;
+		: bcyTestAddr_1
 let testAddr_2 =
 	process.env.btcCurrentChain === "bcy"
 		? bcyTestAddr_2
 		: process.env.btcCurrentChain === "btcTest"
 		? btcTestAddr_2
-		: bcyTestAddr_2;
+		: bcyTestAddr_2
 
 let testPk_1 =
 	process.env.btcCurrentChain === "bcy"
 		? bcyTestPk_1
 		: process.env.btcCurrentChain === "btcTest"
 		? btcTestPk_1
-		: bcyTestPk_1;
+		: bcyTestPk_1
 let testPk_2 =
 	process.env.btcCurrentChain === "bcy"
 		? bcyTestPk_2
 		: process.env.btcCurrentChain === "btcTest"
 		? btcTestPk_2
-		: bcyTestPk_2;
-const bcyTxHash = process.env.bcyTestTxHash || "";
-const btcTxHash = process.env.btcTestTxHash || "";
+		: bcyTestPk_2
+const bcyTxHash = process.env.bcyTestTxHash || ""
+const btcTxHash = process.env.btcTestTxHash || ""
 const txHashExample =
 	process.env.btcCurrentChain === "bcy"
 		? bcyTxHash
 		: process.env.btcCurrentChain === "btcTest"
 		? btcTxHash
-		: bcyTxHash;
+		: bcyTxHash
 
 const txExample =
 	process.env.btcCurrentChain === "bcy"
@@ -186,7 +186,7 @@ const txExample =
 					"dc3ef9d084c47162e189dec88ba3ecef0c4f68d2f6e4e54d5fbf5f635828231c",
 				],
 		  }
-		: {};
+		: {}
 
 describe("비트코인 트랜잭션 생성 테스트", () => {
 	it("비트코인 트랜잭션을 생성하면 트랜잭션 정보를 반환합니다.", (done) => {
@@ -196,16 +196,16 @@ describe("비트코인 트랜잭션 생성 테스트", () => {
 			.expect(201)
 			.end((err, res) => {
 				if (err) {
-					throw err;
+					throw err
 				}
-				expect(res.body.success).to.be.eql(true);
-				expect(res.body.data).to.have.property("tx");
-				expect(res.body.data.tx.addresses).to.include(testAddr_1);
-				expect(res.body.data.tx.addresses).to.include(testAddr_2);
-				done();
-			});
-	});
-});
+				expect(res.body.success).to.be.eql(true)
+				expect(res.body.data).to.have.property("tx")
+				expect(res.body.data.tx.addresses).to.include(testAddr_1)
+				expect(res.body.data.tx.addresses).to.include(testAddr_2)
+				done()
+			})
+	})
+})
 describe("비트코인 트랜잭션 서명 테스트", () => {
 	it("비트코인 트랜잭션을 서명하면 서명한 트랜잭션 정보를 반환합니다.", (done) => {
 		request(app)
@@ -214,57 +214,57 @@ describe("비트코인 트랜잭션 서명 테스트", () => {
 			.expect(201)
 			.end((err, res) => {
 				if (err) {
-					throw err;
+					throw err
 				}
-				expect(res.body.success).to.be.eql(true);
-				expect(res.body.data).to.have.property("tx");
-				expect(res.body.data).to.have.property("tosign");
-				expect(res.body.data).to.have.property("signatures");
-				expect(res.body.data).to.have.property("pubkeys");
-				expect(res.body.data.tx.addresses).to.include(testAddr_1);
-				expect(res.body.data.tx.addresses).to.include(testAddr_2);
-				done();
-			});
-	});
-});
+				expect(res.body.success).to.be.eql(true)
+				expect(res.body.data).to.have.property("tx")
+				expect(res.body.data).to.have.property("tosign")
+				expect(res.body.data).to.have.property("signatures")
+				expect(res.body.data).to.have.property("pubkeys")
+				expect(res.body.data.tx.addresses).to.include(testAddr_1)
+				expect(res.body.data.tx.addresses).to.include(testAddr_2)
+				done()
+			})
+	})
+})
 describe("비트코인 트랜잭션 전송 테스트", () => {
-	let preparedTx: any;
-	let beforeToBalance = 0;
-	let afterToBalance = 0;
+	let preparedTx: any
+	let beforeToBalance = 0
+	let afterToBalance = 0
 	before(async () => {
 		let balanceData = await axios.get(
 			`${testnetURL}/addrs/${testAddr_2}/balance`
-		);
-		beforeToBalance = balanceData.data.final_balance;
+		)
+		beforeToBalance = balanceData.data.final_balance
 		//Prepare Transaction for testing send transaction
 		const createdTx = await axios.post(`${testnetURL}/txs/new?token=${token}`, {
 			inputs: [{ addresses: [testAddr_1] }],
 			outputs: [{ addresses: [testAddr_2], value: 100000 }],
-		});
-		const ECPair = ECPairFactory(ecc);
-		const keyPair = ECPair.fromPrivateKey(Buffer.from(testPk_1, "hex"));
-		let pubkeys: string[] = [];
+		})
+		const ECPair = ECPairFactory(ecc)
+		const keyPair = ECPair.fromPrivateKey(Buffer.from(testPk_1, "hex"))
+		let pubkeys: string[] = []
 		const tmptx = {
 			tx: createdTx.data.tx,
 			tosign: createdTx.data.tosign,
 			pubkeys: pubkeys,
 			signatures: [],
-		};
+		}
 
 		//전달받은 tx에 서명해서 signature를 배열에 추가하고 그에 대응하는 publicKey를 배열에 추가
 		tmptx.signatures = tmptx.tosign.map(function (tosign: any, n: any) {
-			let pubkey: any = keyPair.publicKey.toString("hex");
-			tmptx.pubkeys.push(pubkey);
+			let pubkey: any = keyPair.publicKey.toString("hex")
+			tmptx.pubkeys.push(pubkey)
 
 			return bitcoin.script.signature
 				.encode(
 					keyPair.sign(Buffer.from(tosign, "hex")),
 					bitcoin.Transaction.SIGHASH_ALL
 				)
-				.toString("hex");
-		});
-		preparedTx = tmptx;
-	});
+				.toString("hex")
+		})
+		preparedTx = tmptx
+	})
 	it("비트코인 트랜잭션이 네트워크로 전송되어야 합니다.", (done) => {
 		request(app)
 			.post("/api/btc/txs")
@@ -277,24 +277,24 @@ describe("비트코인 트랜잭션 전송 테스트", () => {
 			.expect(201)
 			.end((err, res) => {
 				if (err) {
-					throw err;
+					throw err
 				}
-				expect(res.body.success).to.be.eql(true);
-				expect(res.body.data).to.have.property("tx");
-				expect(res.body.data.tx.addresses).to.include(testAddr_1);
-				expect(res.body.data.tx.addresses).to.include(testAddr_2);
-				done();
-			});
-	});
+				expect(res.body.success).to.be.eql(true)
+				expect(res.body.data).to.have.property("tx")
+				expect(res.body.data.tx.addresses).to.include(testAddr_1)
+				expect(res.body.data.tx.addresses).to.include(testAddr_2)
+				done()
+			})
+	})
 
 	it("비트코인 트랜잭션 전송 후 잔고가 전송된 값만큼 증가해야 합니다.", async () => {
 		let balanceData = await axios.get(
 			`${testnetURL}/addrs/${testAddr_2}/balance`
-		);
-		afterToBalance = balanceData.data.final_balance;
-		expect(beforeToBalance + 100000).to.least(afterToBalance);
-	});
-});
+		)
+		afterToBalance = balanceData.data.final_balance
+		expect(beforeToBalance + 100000).to.least(afterToBalance)
+	})
+})
 
 describe("비트코인 트랜잭션 조회 테스트", () => {
 	it("비트코인 트랜잭션 정보를 조회하면 트랜잭션 정보를 반환합니다.", (done) => {
@@ -303,10 +303,10 @@ describe("비트코인 트랜잭션 조회 테스트", () => {
 			.expect(200)
 			.end((err, res) => {
 				if (err) {
-					throw err;
+					throw err
 				}
-				expect(res.body.success).to.be.eql(true);
-				done();
-			});
-	});
-});
+				expect(res.body.success).to.be.eql(true)
+				done()
+			})
+	})
+})
