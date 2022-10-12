@@ -176,7 +176,7 @@ describe("이더리움 송금 트랜잭션 전송 테스트", () => {
 	it("이더리움 트랜잭션이 정상적으로 전송되어야 합니다.", (done) => {
 		console.log("이더리움 트랜잭션 전송 응답을 기다립니다 ...");
 		request(app)
-			.post("/api/eth/txs/send")
+			.post("/api/eth/txs")
 			.send({
 				signedTx: rawTransaction,
 			})

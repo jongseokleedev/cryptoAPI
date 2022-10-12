@@ -4,6 +4,7 @@ import request from "supertest";
 import app from "../../src/app";
 
 const testAddr_1 = process.env.ethAddr_1 || "";
+const testMnemonic_1 = process.env.ethMnemonic_1 || "";
 describe("이더리움 지갑 테스트", () => {
 	it("니모닉 코드 생성하면 12개 니모닉 코드를 반환합니다.", (done) => {
 		request(app)
@@ -26,16 +27,15 @@ describe("이더리움 지갑 테스트", () => {
 			.post("/api/eth/wallet/new")
 			.send({
 				password: "1q2w3e4r",
-				mnemonic:
-					"exist blur few deer whale final raw plunge develop permit soap spoil",
+				mnemonic: testMnemonic_1,
 			})
 			.expect(201)
 			.end((err, res) => {
 				if (err) {
 					throw err;
 				}
-				expect(res.body).to.have.property("privateKey");
-				expect(res.body).to.have.property("address");
+				expect(res.body.data).to.have.property("privateKey");
+				expect(res.body.data).to.have.property("address");
 				expect(res.body.success).to.be.eql(true);
 				// 12개의 니모닉 코드 생성 확인
 				done();
@@ -68,7 +68,7 @@ describe("이더리움 지갑 테스트", () => {
 					throw err;
 				}
 				expect(res.body.success).to.be.eql(true);
-				expect(Number(res.body.ethBalance)).to.least(0); //eth 잔액이 0이상이어야 합니다.
+				expect(Number(res.body.data.ethBalance)).to.least(0); //eth 잔액이 0이상이어야 합니다.
 				done();
 			});
 	});

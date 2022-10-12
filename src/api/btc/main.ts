@@ -2,6 +2,8 @@ require("dotenv").config();
 import { Request, Response } from "express";
 const bitcoin = require("bitcoinjs-lib");
 const axios = require("axios");
+
+//set environment variables
 const bcyTestnetURL = "https://api.blockcypher.com/v1/bcy/test";
 const btcTestnetURL = "https://api.blockcypher.com/v1/btc/test3";
 const testnetURL =
@@ -20,6 +22,7 @@ const TESTNET =
 
 const token = process.env.BlockCypherToken;
 
+//체인 정보 조회
 const getChainInfo = async (req: Request, res: Response) => {
 	try {
 		const chainInfo = await axios.get(`${testnetURL}`).catch((err: any) => {
@@ -43,6 +46,7 @@ const getChainInfo = async (req: Request, res: Response) => {
 	}
 };
 
+// blockcypher 토큰 정보 조회
 const getTokenInfo = async (req: Request, res: Response) => {
 	try {
 		let tokenInput = req.params.token;

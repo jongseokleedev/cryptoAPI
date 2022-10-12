@@ -5,6 +5,7 @@ import ECPairFactory from "ecpair";
 import * as ecc from "tiny-secp256k1";
 const axios = require("axios");
 
+//set environment variables
 const bcyTestnetURL = "https://api.blockcypher.com/v1/bcy/test";
 const btcTestnetURL = "https://api.blockcypher.com/v1/btc/test3";
 const testnetURL =
@@ -23,6 +24,7 @@ const TESTNET =
 
 const token = process.env.BlockCypherToken;
 
+//p2wpkh wallet 생성
 const newWallet = async (req: Request, res: Response) => {
 	const result = await axios
 		.post(`${testnetURL}/addrs?bech32=true`)
@@ -43,6 +45,7 @@ const newWallet = async (req: Request, res: Response) => {
 	});
 };
 
+//비트코인 잔액 확인
 const balanceOf = async (req: Request, res: Response) => {
 	const { address } = req.params;
 	const balance = await axios
@@ -61,6 +64,7 @@ const balanceOf = async (req: Request, res: Response) => {
 	});
 };
 
+//비트코인 테스트코인 요청
 const getFaucet = async (req: Request, res: Response) => {
 	const { address, amount } = req.body;
 	const result = await axios

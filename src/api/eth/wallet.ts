@@ -2,19 +2,17 @@ require("dotenv").config();
 import { Request, Response, NextFunction } from "express";
 import Web3 from "web3";
 import lightwallet from "eth-lightwallet";
-
 import { Error } from "../../common/interfaces";
-const domain = require("domain").create();
+
+//set environment variables
 const SepoliaTestnet: string = process.env.SepoliaTestnet || "";
 const GoerliTestnet: string = process.env.GoerliTestnet || "";
-const EthMainnet: string = process.env.EthMainnet || "";
+
 const provider =
 	process.env.ethCurrentChain === "sepolia"
 		? SepoliaTestnet
 		: process.env.ethCurrentChain === "goerli"
 		? GoerliTestnet
-		: process.env.ethCurrentChain == "mainnet"
-		? EthMainnet
 		: SepoliaTestnet;
 const web3 = new Web3(new Web3.providers.HttpProvider(provider));
 const { toWei, fromWei } = web3.utils;
@@ -79,8 +77,7 @@ const newWallet = async (req: Request, res: Response) => {
 					res.status(201).send({
 						success: true,
 						message: "정상적으로 처리되었습니다.",
-						privateKey: privateKey,
-						address: address,
+						data: { privateKey: privateKey, address: address },
 					});
 				});
 			}
@@ -104,7 +101,7 @@ const balanceOf = async (req: Request, res: Response, next: NextFunction) => {
 			return res.status(200).send({
 				success: true,
 				message: "정상적으로 처리되었습니다.",
-				ethBalance: fromWei(balance),
+				data: { ethBalance: fromWei(balance) },
 			});
 		} else {
 			return res.status(400).send({

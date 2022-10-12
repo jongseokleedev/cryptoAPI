@@ -2,6 +2,7 @@ require("dotenv").config();
 import { Request, Response } from "express";
 import Web3 from "web3";
 
+//set environment variables
 const soohoAbi = require("../../contracts/sooho/soohoERC20abi");
 const goerliSoohoContractAddress = require("../../contracts/sooho/goerliSoohoERC20address");
 const sepoliaSoohoContractAddress = require("../../contracts/sooho/sepoliaSoohoERC20address");
@@ -28,6 +29,7 @@ const { toWei, fromWei } = web3.utils;
 
 const soohoContract = new web3.eth.Contract(soohoAbi, soohoContractAddress);
 
+//ERC20 토큰 잔액 조회
 const balanceOfERC20 = async (req: Request, res: Response) => {
 	const { address, tokenSymbol } = req.params;
 	let myContract = soohoContract;
@@ -37,7 +39,7 @@ const balanceOfERC20 = async (req: Request, res: Response) => {
 		res.status(200).send({
 			success: true,
 			message: "success",
-			tokenBalance: balance / 100, //devided by decimal value. in case of sooho, decimal value is 2
+			data: { tokenBalance: balance },
 		});
 	} else {
 		res.status(400).send({
@@ -46,6 +48,7 @@ const balanceOfERC20 = async (req: Request, res: Response) => {
 	}
 };
 
+//erc20 트랜잭션 생성
 const createERC20Transaction = async (req: Request, res: Response) => {
 	const { from, to, value } = req.body;
 	const { tokenSymbol } = req.params;
@@ -69,7 +72,7 @@ const createERC20Transaction = async (req: Request, res: Response) => {
 			nonce: nonce,
 			gasPrice: await web3.eth.getGasPrice(),
 			gasLimit: 210000,
-			data: await myContract.methods.transfer(to, value * 100).encodeABI(),
+			data: await myContract.methods.transfer(to, value * 100).encodeABI(), // decimal value 2를 고려해서 value *100
 		};
 		if (tokenSymbol === "sooho") {
 			res.status(201).send({
@@ -79,7 +82,7 @@ const createERC20Transaction = async (req: Request, res: Response) => {
 			});
 		} else {
 			res.status(400).send({
-				message: "Bad Request. Unsupported Token Name",
+				message: "Bad Request. Unsupported Token Symbol",
 			});
 		}
 	} catch (err) {
@@ -87,6 +90,7 @@ const createERC20Transaction = async (req: Request, res: Response) => {
 	}
 };
 
+//erc20 트랜잭션 전송
 const sendERC20Transaction = async (req: Request, res: Response) => {
 	const { signedTx } = req.body;
 

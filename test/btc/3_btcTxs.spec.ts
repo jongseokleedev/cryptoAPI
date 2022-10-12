@@ -267,7 +267,7 @@ describe("비트코인 트랜잭션 전송 테스트", () => {
 	});
 	it("비트코인 트랜잭션이 네트워크로 전송되어야 합니다.", (done) => {
 		request(app)
-			.post("/api/btc/txs/send")
+			.post("/api/btc/txs")
 			.send({
 				tx: preparedTx.tx,
 				tosign: preparedTx.tosign,

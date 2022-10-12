@@ -45,9 +45,9 @@ describe("ERC20 잔액 조회 테스트", () => {
 				if (err) {
 					throw err;
 				}
-				expect(res.body).to.have.property("tokenBalance");
+				expect(res.body.data).to.have.property("tokenBalance");
 				expect(res.body.success).to.be.eql(true);
-				expect(res.body.tokenBalance).to.least(0); //tokenBalance가 0보다 크다.
+				expect(Number(res.body.data.tokenBalance)).to.least(0); //tokenBalance가 0보다 크다.
 				done();
 			});
 	});
@@ -116,7 +116,7 @@ describe("ERC20 송금 트랜잭션 전송 테스트", () => {
 	it("ERC20 트랜잭션이 정상적으로 전송되어야합니다.", (done) => {
 		console.log("ERC20 트랜잭션 전송 응답을 기다립니다 ...");
 		request(app)
-			.post("/api/eth/txs/send")
+			.post("/api/eth/txs")
 			.send({
 				signedTx: rawTransaction,
 			})

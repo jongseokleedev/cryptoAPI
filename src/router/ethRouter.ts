@@ -14,17 +14,23 @@ import {
 import { getChainInfo } from "../api/eth/main";
 const router: Router = express.Router();
 
+//main
 router.get("/main/chain", getChainInfo);
+
+//wallet
 router.post("/wallet/newMnemonic", newMnemonic);
 router.post("/wallet/new", newWallet);
 router.get("/wallet/balanceOf/:address", balanceOf);
+
+//erc20
 router.get("/erc20/balanceOf/:tokenSymbol/:address", balanceOfERC20);
-
-router.post("/txs/new", createTransaction);
-router.post("/txs/sign", signTransaction);
-router.post("/txs/send", sendTransaction);
-router.get("/txs/:txHash", getTransaction);
-
 router.post("/erc20/new/:tokenSymbol", createERC20Transaction);
 router.post("/erc20/send", sendERC20Transaction);
+
+//txs
+router.post("/txs/new", createTransaction);
+router.post("/txs/sign", signTransaction);
+router.post("/txs", sendTransaction);
+router.get("/txs/:txHash", getTransaction);
+
 export default router;

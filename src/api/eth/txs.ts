@@ -2,20 +2,20 @@ require("dotenv").config();
 import { Request, Response } from "express";
 import Web3 from "web3";
 import { ethTx } from "../../common/interfaces";
+
+//set environment variables
 const SepoliaTestnet: string = process.env.SepoliaTestnet || "";
 const GoerliTestnet: string = process.env.GoerliTestnet || "";
-const EthMainnet: string = process.env.EthMainnet || "";
 const provider =
 	process.env.ethCurrentChain === "sepolia"
 		? SepoliaTestnet
 		: process.env.ethCurrentChain === "goerli"
 		? GoerliTestnet
-		: process.env.ethCurrentChain == "mainnet"
-		? EthMainnet
 		: SepoliaTestnet;
 const web3 = new Web3(new Web3.providers.HttpProvider(provider));
 const { toWei, fromWei } = web3.utils;
 
+// 이더리움 트랜잭션 생성
 const createTransaction = async (req: Request, res: Response) => {
 	const { from, to, value } = req.body;
 	const isValidFromAddress = web3.utils.isAddress(from); // 유효한 이더리움 주소인지 확인
@@ -56,6 +56,7 @@ const createTransaction = async (req: Request, res: Response) => {
 	});
 };
 
+//이더리움 트랜잭션 서명
 const signTransaction = async (req: Request, res: Response) => {
 	try {
 		const { tx, privateKey } = req.body;
@@ -76,6 +77,7 @@ const signTransaction = async (req: Request, res: Response) => {
 	}
 };
 
+//이더리움 트랜잭션 전송
 const sendTransaction = async (req: Request, res: Response) => {
 	const { signedTx } = req.body;
 	const receipt = await web3.eth.sendSignedTransaction(signedTx, (err) => {
@@ -90,6 +92,7 @@ const sendTransaction = async (req: Request, res: Response) => {
 	});
 };
 
+//이더리움 트랜잭션 조회
 const getTransaction = async (req: Request, res: Response) => {
 	const { txHash } = req.params;
 

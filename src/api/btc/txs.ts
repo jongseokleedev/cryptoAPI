@@ -9,6 +9,7 @@ const bycpher = require("blockcypher");
 const axios = require("axios");
 const buffer = require("buffer");
 
+//set environment variables
 const bcyTestnetURL = "https://api.blockcypher.com/v1/bcy/test";
 const btcTestnetURL = "https://api.blockcypher.com/v1/btc/test3";
 const testnetURL =
@@ -27,6 +28,7 @@ const TESTNET =
 
 const token = process.env.BlockCypherToken;
 
+//비트코인 트랜잭션 생성
 const createTransaction = async (req: Request, res: Response) => {
 	try {
 		const { from, to, value } = req.body;
@@ -55,6 +57,7 @@ const createTransaction = async (req: Request, res: Response) => {
 	}
 };
 
+//비트코인 트랜잭션 전송
 const sendTransaction = async (req: Request, res: Response) => {
 	try {
 		const { tx, tosign, signatures, pubkeys } = req.body;
@@ -66,7 +69,7 @@ const sendTransaction = async (req: Request, res: Response) => {
 				pubkeys: pubkeys,
 			})
 			.catch((err: any) => {
-				console.log(err);
+				console.log(err.response.data.errors);
 				return res.status(500).send({
 					success: false,
 					err: err,
@@ -86,6 +89,7 @@ const sendTransaction = async (req: Request, res: Response) => {
 	}
 };
 
+//비트코인 트랜잭션 서명
 const signTransaction = async (req: Request, res: Response) => {
 	try {
 		const { privateKey, rawTx } = req.body;
@@ -125,6 +129,7 @@ const signTransaction = async (req: Request, res: Response) => {
 	}
 };
 
+//비트코인 트랜잭션 조회
 const getTransaction = async (req: Request, res: Response) => {
 	const { txHash } = req.params;
 	try {
